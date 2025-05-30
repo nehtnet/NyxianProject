@@ -56,15 +56,6 @@
       }
     },
     {
-      "identity" : "runestone",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nehtnet/Runestone.git",
-      "state" : {
-        "revision" : "78739ed927fb9247a387f264b6a8f1e87a4d263a",
-        "version" : "0.5.1"
-      }
-    },
-    {
       "identity" : "swift-algorithms",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms.git",
