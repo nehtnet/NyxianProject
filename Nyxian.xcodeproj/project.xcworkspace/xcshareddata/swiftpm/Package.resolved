@@ -58,9 +58,9 @@
     {
       "identity" : "runestone",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nehtnet/Runestone.git",
+      "location" : "https://github.com/simonbs/Runestone.git",
       "state" : {
-        "revision" : "3201b183aac40ad387a922f946a7da9769dc61e6",
+        "revision" : "1fad339aab99cf2136ce6bf8c32da3265b2e85e5",
         "version" : "0.5.1"
       }
     },
