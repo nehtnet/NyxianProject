@@ -28,6 +28,7 @@ jobs:
             -archivePath ./build/Nyxian.xcarchive \
             -allowProvisioningUpdates \
             -xcconfig ci.xcconfig \
+            -verbose \
             CODE_SIGNING_ALLOWED=NO
             
       - name: Export .ipa
