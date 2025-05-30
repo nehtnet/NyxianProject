@@ -16,25 +16,19 @@ let package = Package(
         .package(url: "https://github.com/tree-sitter/tree-sitter", .upToNextMinor(from: "0.20.9"))
     ],
     targets: [
-        // ✅ Safe version for use in your app
+
         .target(
             name: "Runestone",
             dependencies: [
                 .product(name: "TreeSitter", package: "tree-sitter")
             ],
-            resources: [
-                .copy("PrivacyInfo.xcprivacy"),
-                .process("TextView/Appearance/Theme.xcassets")
-            ]
-        ),
-
-        // ✅ Testing version only — not linked in your app
-        .target(
-            name: "RunestoneTesting",
-            dependencies: ["Runestone"],
             swiftSettings: [
                 .define("ENABLE_TESTABILITY"),
                 .unsafeFlags(["-enable-testing"])
+            ],
+            resources: [
+                .copy("PrivacyInfo.xcprivacy"),
+                .process("TextView/Appearance/Theme.xcassets")
             ]
         ),
 
