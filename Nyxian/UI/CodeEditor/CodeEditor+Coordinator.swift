@@ -20,7 +20,7 @@
 import Foundation
 import UIKit
 import Runestone
-@testable import Runestone
+@testable import RunestoneTesting
 
 /*
  * TODO: TodoList for the upcoming changes to the typechecking UI engine
