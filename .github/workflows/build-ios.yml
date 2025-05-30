@@ -1,0 +1,47 @@
+name: Build iOS App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2'
+
+      - name: Install LLVM
+        run: |
+          brew install llvm
+
+      - name: Build and Archive
+        run: |
+          xcodebuild clean archive \
+            -project Nyxian.xcodeproj \
+            -scheme Nyxian \
+            -archivePath ${{ github.workspace }}/build/Nyxian.xcarchive \
+            -destination "generic/platform=iOS" \
+            -allowProvisioningUpdates \
+            -xcconfig ${{ github.workspace }}/ci.xcconfig \
+            CODE_SIGNING_ALLOWED=NO
+            
+      - name: Export .ipa
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath ${{ github.workspace }}/build/Nyxian.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath ${{ github.workspace }}/build \
+            -allowProvisioningUpdates \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload .ipa artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nyxian App IPA
+          path: build/*.ipa
