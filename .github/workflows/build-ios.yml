@@ -25,10 +25,9 @@ jobs:
           xcodebuild clean archive \
             -project Nyxian.xcodeproj \
             -scheme Nyxian \
-            -archivePath ${{ github.workspace }}/build/Nyxian.xcarchive \
-            -destination "generic/platform=iOS" \
+            -archivePath ./build/Nyxian.xcarchive \
             -allowProvisioningUpdates \
-            -xcconfig ${{ github.workspace }}/ci.xcconfig \
+            -xcconfig ci.xcconfig \
             CODE_SIGNING_ALLOWED=NO
             
       - name: Export .ipa
