@@ -16,24 +16,16 @@ let package = Package(
         .package(url: "https://github.com/tree-sitter/tree-sitter", .upToNextMinor(from: "0.20.9"))
     ],
     targets: [
-        .target(name: "Runestone", 
-        dependencies: [
+        .target(name: "Runestone", dependencies: [
             .product(name: "TreeSitter", package: "tree-sitter")
-        ], 
-        resources: [
+        ], resources: [
             .copy("PrivacyInfo.xcprivacy"),
             .process("TextView/Appearance/Theme.xcassets")
-        ], 
-        swiftSettings: [
-            .define("ENABLE_TESTABILITY"),
-            .unsafeFlags(["-enable-testing"])
         ]),
-        .target(name: "TestTreeSitterLanguages", 
-        cSettings: [
+        .target(name: "TestTreeSitterLanguages", cSettings: [
             .unsafeFlags(["-w"])
         ]),
-        .testTarget(name: "RunestoneTests", 
-        dependencies: [
+        .testTarget(name: "RunestoneTests", dependencies: [
             "Runestone",
             "TestTreeSitterLanguages"
         ])
