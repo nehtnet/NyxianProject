@@ -479,7 +479,7 @@
 		};
 		AF9FD5872DC935F400411E1A /* XCRemoteSwiftPackageReference "Runestone" */ = {
 			isa = XCRemoteSwiftPackageReference;
-                        repositoryURL = "./Runestone";
+                        relativePath = "Runestone";
                         requirement = {
                                 kind = localPackage;
                         };
