@@ -28,14 +28,14 @@ jobs:
           xcodebuild -resolvePackageDependencies -project Nyxian.xcodeproj
 
       - name: LLDB Debug
-       run: |
-         lldb -- batch -o run -- xcodebuild clean archive \
-           -project Nyxian.xcodeproj \
-           -scheme Nyxian \
-           -archivePath ./build/Nyxian.xcarchive \
-           -allowProvisioningUpdates \
-           -xcconfig ci.xcconfig \
-           CODE_SIGNING_ALLOWED=NO
+        run: |
+          lldb -- batch -o run -- xcodebuild clean archive \
+            -project Nyxian.xcodeproj \
+            -scheme Nyxian \
+            -archivePath ./build/Nyxian.xcarchive \
+            -allowProvisioningUpdates \
+            -xcconfig ci.xcconfig \
+            CODE_SIGNING_ALLOWED=NO
       
       - name: Build and Archive
         run: |
