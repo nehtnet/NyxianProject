@@ -338,7 +338,11 @@ class FileListViewController: UITableViewController, UIDocumentPickerDelegate {
             }
             let deleteAction = UIAction(title: "Remove", image: UIImage(systemName: "trash.fill"), attributes: .destructive) { action in
                 let entry = self.entries[indexPath.row]
-                if ((try? FileManager.default.removeItem(atPath: "\(self.path)/\(entry.name)")) != nil) {
+                let fileUrl: URL = URL(fileURLWithPath: "\(self.path)/\(entry.name)")
+                if ((try? FileManager.default.removeItem(at: fileUrl)) != nil) {
+                    let database: DebugDatabase = DebugDatabase.getDatabase(ofPath: "\(self.project.getCachePath().1)/debug.json")
+                    database.removeFileDebug(ofPath: fileUrl.path)
+                    database.saveDatabase(toPath: "\(self.project.getCachePath().1)/debug.json")
                     self.entries.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 }

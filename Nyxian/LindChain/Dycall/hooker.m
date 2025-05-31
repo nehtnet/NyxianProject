@@ -30,7 +30,7 @@
 ///
 extern void dy_exit(int status);
 extern int dy_atexit(void (*func)(void));
-void dy_fprintf(FILE *fptr, const char *format, ...);
+extern void dy_fprintf(FILE *fptr, const char *format, ...);
 
 ///
 /// Function to get dylib slide to avoid fucking around with our own symbols
@@ -81,8 +81,6 @@ bool hooker(const char *path)
         genrebind("exit", dy_exit),
         genrebind("_exit", dy_exit),
         genrebind("atexit", dy_atexit),
-        
-        // to handle file pointer the way we want to
         genrebind("fprintf", dy_fprintf)
     };
 

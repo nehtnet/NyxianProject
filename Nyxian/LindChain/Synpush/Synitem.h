@@ -17,6 +17,9 @@
 @property (nonatomic,readwrite) UInt8 type;
 @property (nonatomic,strong) NSString *message;
 
++ (NSArray<Synitem*> *)OfClangErrorWithString:(NSString*)errorString;
++ (void)OfClangErrorWithString:(NSString*)errorString usingArray:(NSMutableArray<Synitem*> **)issues;
+
 @end
 
 #endif /* SYNITEM_H */

@@ -26,12 +26,14 @@
 #include <pthread.h>
 #include "llvm/Support/raw_ostream.h"
 #import <Compiler/Compiler.h>
+#import <Synpush/Synpush.h>
 
 // TODO: Might want to extract a header
 int CompileObject(int argc,
                   const char **argv,
                   const char *outputFilePath,
-                  const char *platformTripple);
+                  const char *platformTripple,
+                  char **errorStringSet);
 
 @interface Compiler ()
 
@@ -60,6 +62,7 @@ int CompileObject(int argc,
 - (int)compileObject:(nonnull NSString*)filePath
           outputFile:(NSString*)outputFilePath
       platformTriple:(NSString*)platformTriple
+              issues:(NSMutableArray<Synitem*> * _Nullable * _Nonnull)issues
 {
     // Allocating a C array by the given _flags array
     const int argc = (int)[_flags count] + 2;
@@ -73,7 +76,15 @@ int CompileObject(int argc,
     [self.lock unlock];
 
     // Compile and get the resulting integer
-    const int result = CompileObject(argc, (const char**)argv, [outputFilePath UTF8String], [platformTriple UTF8String]);
+    char *errorString = NULL;
+    const int result = CompileObject(argc, (const char**)argv, [outputFilePath UTF8String], [platformTriple UTF8String], &errorString);
+    
+    if(errorString)
+    {
+        NSString *errorObjCString = [NSString stringWithCString:errorString encoding:NSUTF8StringEncoding];
+        [Synitem OfClangErrorWithString:errorObjCString usingArray:issues];
+        free(errorString);
+    }
     
     // Deallocating the entire C array
     for(int i = 0; i < argc; i++) free(argv[i]);

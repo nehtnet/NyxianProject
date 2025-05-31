@@ -135,8 +135,17 @@ class DebugDatabase: Codable {
         return synItems
     }
     
+    func removeFileDebug(ofPath path: String) {
+        let lastPathComponent: String = URL(fileURLWithPath: path).lastPathComponent
+        self.debugObjects[lastPathComponent] = nil
+    }
+    
     func clearDatabase() {
         self.debugObjects = [:]
+        self.debugObjects["Internal"] = DebugObject(title: "Internal", type: .DebugMessage)
+    }
+    
+    func reuseDatabase() {
         self.debugObjects["Internal"] = DebugObject(title: "Internal", type: .DebugMessage)
     }
 }
@@ -186,7 +195,7 @@ class UIDebugViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sortedDebugObjects[section].title
+        return "\(sortedDebugObjects[section].title) - \(sortedDebugObjects[section].debugItems.count)"
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

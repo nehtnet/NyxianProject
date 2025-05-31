@@ -49,7 +49,7 @@ class Builder {
         self.project = project
         
         self.database = DebugDatabase.getDatabase(ofPath: "\(self.project.getCachePath().1)/debug.json")
-        self.database.clearDatabase()
+        self.database.reuseDatabase()
         
         var genericCompilerFlags: [String] = [
             "-isysroot",
@@ -190,9 +190,19 @@ class Builder {
                 let eobject = expectedObjectFile(forPath: rpath)
                 let outputFilePath = "\(self.project.getCachePath().1)/\(eobject)"
                 
-                if self.compiler.compileObject(filePath, outputFile: outputFilePath, platformTriple: self.project.projectConfig.minimum_version) != 0 {
+                var issues: NSMutableArray? = NSMutableArray()
+                
+                if self.compiler.compileObject(
+                    filePath,
+                    outputFile: outputFilePath,
+                    platformTriple: self.project.projectConfig.minimum_version,
+                    issues: &issues
+                ) != 0 {
                     threader.lockdown()
-                    return
+                }
+                
+                if let nsArray = issues as? [Synitem] {
+                    self.database.setFileDebug(ofPath: filePath, synItems: nsArray)
                 }
                 
                 XCodeButton.incrementProgress(progress: pstep)
@@ -305,6 +315,8 @@ class Builder {
             if OpenAppAfterReinstallTrampolineSwitch(
                 installer,
                 self.project) {
+                self.database.addInternalMessage(message: "Application sucessfully build and installed", severity: .Note)
+                self.database.saveDatabase(toPath: "\(project.getCachePath().1)/debug.json")
                 exit(0)
             } else {
                 self.database.addInternalMessage(message: "Failed to open application", severity: .Error)

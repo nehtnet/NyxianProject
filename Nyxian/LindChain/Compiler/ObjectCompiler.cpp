@@ -54,12 +54,22 @@ using namespace clang::driver;
 int CompileObject(int argc,
                   const char **argv,
                   const char *outputFilePath,
-                  const char *platformTripple)
+                  const char *platformTripple,
+                  char **errorStringSet)
 {
     std::string errorString;
     llvm::raw_string_ostream errorOutputStream(errorString);
 
     auto DiagOpts = llvm::makeIntrusiveRefCnt<DiagnosticOptions>();
+    
+    DiagOpts->ShowColors = false;
+    DiagOpts->ShowLevel = true;
+    DiagOpts->ShowOptionNames = false;
+    DiagOpts->MessageLength = 0;
+    DiagOpts->ShowSourceRanges = false;
+    DiagOpts->ShowPresumedLoc = false;
+    DiagOpts->ShowCarets = false;
+    
     auto DiagClient = std::make_unique<TextDiagnosticPrinter>(errorOutputStream, &*DiagOpts);
     auto DiagID = llvm::makeIntrusiveRefCnt<DiagnosticIDs>();
     DiagnosticsEngine Diags(DiagID, &*DiagOpts, DiagClient.get());
@@ -99,13 +109,6 @@ int CompileObject(int argc,
     const auto &CCArgs = Cmd.getArguments();
     auto CI = std::make_unique<CompilerInvocation>();
     CompilerInvocation::CreateFromArgs(*CI, CCArgs, Diags);
-    
-    if(CI->getHeaderSearchOpts().Verbose)
-    {
-        errorOutputStream << "compiler invocation:\n";
-        Jobs.Print(errorOutputStream, "\n", true);
-        errorOutputStream << "\n";
-    }
 
     CI->getFrontendOpts().DisableFree = false;
     CI->getFrontendOpts().OutputFile = outputFilePath;
@@ -124,13 +127,7 @@ int CompileObject(int argc,
     
     Clang.ExecuteAction(*Act);
     
-    DiagnosticsEngine &diagnostics = Clang.getDiagnostics();
-    
-    if((diagnostics.getNumWarnings() + diagnostics.getNumErrors()) > 0)
-    {
-        errorString = errorOutputStream.str();
-        ls_printf("%s\n", errorString.c_str());
-    }
+    *errorStringSet = strdup(errorString.c_str());
 
-    return Clang.getDiagnostics().hasErrorOccurred() ? 1 : 0;
+    return Clang.getDiagnostics().hasErrorOccurred();
 }

@@ -21,6 +21,7 @@
 #define FCMBridge_H
 
 #import <Foundation/Foundation.h>
+#import <Synpush/Synpush.h>
 
 /// Class (intended to be single-instanced) to provide LLVM C++ service to Swift front-end
 @interface Compiler : NSObject
@@ -29,7 +30,8 @@
 
 - (int)compileObject:(nonnull NSString*)filePath
           outputFile:(NSString*)outputFilePath
-      platformTriple:(NSString*)platformTriple;
+      platformTriple:(NSString*)platformTriple
+              issues:(NSMutableArray<Synitem*> * _Nullable * _Nonnull)issues;
 
 @end
 
