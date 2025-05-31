@@ -20,6 +20,11 @@ jobs:
         run: |
           brew install llvm
 
+      - name: Resolve Swift Package Dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Nyxian.xcodeproj
+
       - name: Build and Archive
         run: |
           xcodebuild clean archive \
