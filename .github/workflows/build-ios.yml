@@ -23,6 +23,8 @@ jobs:
       - name: Clean Derived Data and Reset Package Caches
         run: |
           rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/Library/Caches/org.llvm.clang
+          rm -rf ~/Library/Developer/Xcode/Archives/*
           xcodebuild -resolvePackageDependencies -project Nyxian.xcodeproj
 
       - name: Build and Archive
