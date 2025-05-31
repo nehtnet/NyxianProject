@@ -27,15 +27,16 @@ jobs:
 
       - name: Build and Archive
         run: |
-          set -o pipefail && xcodebuild clean archive \
+          set -o pipefail
+          xcodebuild clean archive \
             -project Nyxian.xcodeproj \
             -scheme Nyxian \
             -archivePath ./build/Nyxian.xcarchive \
             -allowProvisioningUpdates \
             -xcconfig ci.xcconfig \
             -verbose \
-            CODE_SIGNING_ALLOWED=NO | tee xcodebuild.log
-
+            CODE_SIGNING_ALLOWED=NO > xcodebuild.log 2>&1
+  
       - name: Upload Build Logs
         uses: actions/upload-artifact@v4
         with:
