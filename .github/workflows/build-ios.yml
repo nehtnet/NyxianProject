@@ -19,35 +19,16 @@ jobs:
       - name: Install LLVM
         run: |
           brew install llvm
-
-      - name: Clean Derived Data and Reset Package Caches
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/Library/Caches/org.llvm.clang
-          rm -rf ~/Library/Developer/Xcode/Archives/*
-          xcodebuild -resolvePackageDependencies -project Nyxian.xcodeproj
-
-      - name: LLDB Debug
-        run: |
-          lldb -- batch -o run -- xcodebuild clean archive \
-            -project Nyxian.xcodeproj \
-            -scheme Nyxian \
-            -archivePath ./build/Nyxian.xcarchive \
-            -allowProvisioningUpdates \
-            -xcconfig ci.xcconfig \
-            CODE_SIGNING_ALLOWED=NO
       
       - name: Build and Archive
         run: |
-          set -o pipefail
           xcodebuild clean archive \
             -project Nyxian.xcodeproj \
             -scheme Nyxian \
             -archivePath ./build/Nyxian.xcarchive \
             -allowProvisioningUpdates \
             -xcconfig ci.xcconfig \
-            -verbose \
-            CODE_SIGNING_ALLOWED=NO > xcodebuild.log 2>&1
+            CODE_SIGNING_ALLOWED=NO
   
       - name: Upload Build Logs
         uses: actions/upload-artifact@v4
