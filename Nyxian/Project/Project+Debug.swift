@@ -105,23 +105,23 @@ class DebugDatabase: Codable {
     
     func setFileDebug(ofPath path: String, synItems: [Synitem]) {
         // TODO: Last path component is pretty ineffective if the user has files with the same name at a other location in the project
-        let lastPathComponent: String = URL(fileURLWithPath: path).lastPathComponent
-        let fileObject: DebugObject = DebugObject(title: lastPathComponent, type: .DebugFile)
+        let fixedPath: String = path.trimmingPathToFirstUUID().trimmingPathToFirstUUID()
+        let fileObject: DebugObject = DebugObject(title: fixedPath, type: .DebugFile)
         
         for item in synItems {
             let debugItem: DebugItem = DebugItem(severity: DebugItem.DebugServerity(rawValue: item.type) ?? .Note, message: item.message, line: item.line, column: item.column)
             fileObject.debugItems.append(debugItem)
         }
         
-        self.debugObjects[lastPathComponent] = (synItems.count > 0) ? fileObject : nil
+        self.debugObjects[fixedPath] = (synItems.count > 0) ? fileObject : nil
     }
     
     func getFileDebug(ofPath path: String) -> [Synitem] {
         var synItems: [Synitem] = []
         
         // Get object
-        let lastPathComponent: String = URL(fileURLWithPath: path).lastPathComponent
-        guard let fileObject = self.debugObjects[lastPathComponent] else { return synItems }
+        let fixedPath: String = path.trimmingPathToFirstUUID().trimmingPathToFirstUUID()
+        let fileObject: DebugObject = DebugObject(title: fixedPath, type: .DebugFile)
         
         for item in fileObject.debugItems {
             let synItem: Synitem = Synitem()
@@ -147,6 +147,31 @@ class DebugDatabase: Codable {
     
     func reuseDatabase() {
         self.debugObjects["Internal"] = DebugObject(title: "Internal", type: .DebugMessage)
+    }
+}
+
+extension String {
+    func removingUUIDs() -> String {
+        let pattern = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        return self.replacingOccurrences(of: pattern, with: "UUID", options: .regularExpression)
+    }
+    
+    func trimmingPathToFirstUUID() -> String {
+        let components = self.components(separatedBy: "/")
+        let uuidPattern = #"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"#
+        
+        var foundUUID = false
+        var trimmedComponents: [String] = []
+        
+        for component in components {
+            if foundUUID {
+                trimmedComponents.append(component)
+            } else if component.range(of: uuidPattern, options: .regularExpression) != nil {
+                foundUUID = true // Start including from next component
+            }
+        }
+        
+        return foundUUID ? trimmedComponents.joined(separator: "/") : nil ?? "UNKNOWN"
     }
 }
 
@@ -187,6 +212,21 @@ class UIDebugViewController: UITableViewController {
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
+        
+        /*let buttonBar: UIBarButtonItem = UIBarButtonItem()
+        buttonBar.tintColor = .label
+        buttonBar.title = "Clear"
+        buttonBar.target = self
+        buttonBar.action = #selector(clearDatabase)
+        self.navigationItem.setRightBarButton(buttonBar, animated: false)*/
+        
+        let testButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(clearDatabase))
+        testButton.tintColor = UIColor.systemRed
+        /*let testButton = UIButton(type: .system)
+        testButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        testButton.addTarget(self, action: #selector(clearDatabase), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: testButton)*/
+        self.navigationItem.rightBarButtonItem = testButton
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -273,5 +313,11 @@ class UIDebugViewController: UITableViewController {
         cell.preservesSuperviewLayoutMargins = false
         
         return cell
+    }
+    
+    @objc func clearDatabase() {
+        debugDatabase.clearDatabase()
+        debugDatabase.saveDatabase(toPath: self.file)
+        tableView.reloadData()
     }
 }

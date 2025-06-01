@@ -107,18 +107,12 @@ class FileListViewController: UITableViewController, UIDocumentPickerDelegate {
             projectMenuElements.append(UIAction(title: "Build", image: UIImage(systemName: "hammer.fill"), handler: { _ in
                 self.buildProject()
             }))
-            projectMenuElements.append(UIAction(title: "Log", image: UIImage(systemName: "apple.terminal.fill"), handler: { _ in
+            projectMenuElements.append(UIAction(title: "Issue Navigator", image: UIImage(systemName: "exclamationmark.triangle.fill"), handler: { _ in
                 let loggerView = UINavigationController(rootViewController: UIDebugViewController(project: self.project))
                 loggerView.modalPresentationStyle = .formSheet
                 self.present(loggerView, animated: true)
             }))
-            projectMenuElements.append(UIAction(title: "Settings", image: {
-                if #available(iOS 17.0, *) {
-                    return UIImage(systemName: "gearshape.fill")
-                } else {
-                    return UIImage(systemName: "gear")
-                }
-            }(), handler: { _ in
+            projectMenuElements.append(UIAction(title: "Log", image: UIImage(systemName: "apple.terminal.fill"), handler: { _ in
                 let loggerView = LoggerView()
                 loggerView.modalPresentationStyle = .formSheet
                 self.present(loggerView, animated: true)

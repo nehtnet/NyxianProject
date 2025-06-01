@@ -128,6 +128,7 @@ int CompileObject(int argc,
     Clang.ExecuteAction(*Act);
     
     *errorStringSet = strdup(errorString.c_str());
+    ls_printf("%s\n", *errorStringSet);
 
     return Clang.getDiagnostics().hasErrorOccurred();
 }

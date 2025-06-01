@@ -311,7 +311,6 @@ class Builder {
         waitonmebaby.wait()
         
         if invokedInstallationPopup {
-            sleep(1)
             if OpenAppAfterReinstallTrampolineSwitch(
                 installer,
                 self.project) {

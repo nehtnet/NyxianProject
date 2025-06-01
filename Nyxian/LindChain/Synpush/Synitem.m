@@ -28,7 +28,7 @@
     for(NSString *line in errorLines)
     {
         NSArray *errorComponents = [line componentsSeparatedByString:@":"];
-        if([errorComponents count] == 5)
+        if([errorComponents count] >= 5)
         {
             Synitem *item = [[Synitem alloc] init];
             item.line = [errorComponents[1] unsignedIntValue];
@@ -39,7 +39,8 @@
             if(item.type == 0)
                 continue;
             
-            item.message = errorComponents[4];
+            NSRange messageRange = NSMakeRange(4, errorComponents.count - 4);
+            item.message = [[errorComponents subarrayWithRange:messageRange] componentsJoinedByString:@":"];
             
             [issues addObject:item];
         }
@@ -55,7 +56,7 @@
     for(NSString *line in errorLines)
     {
         NSArray *errorComponents = [line componentsSeparatedByString:@":"];
-        if([errorComponents count] == 5)
+        if([errorComponents count] >= 5)
         {
             Synitem *item = [[Synitem alloc] init];
             item.line = [errorComponents[1] unsignedIntValue];
@@ -66,7 +67,8 @@
             if(item.type == 0)
                 continue;
             
-            item.message = errorComponents[4];
+            NSRange messageRange = NSMakeRange(4, errorComponents.count - 4);
+            item.message = [[errorComponents subarrayWithRange:messageRange] componentsJoinedByString:@":"];
             
             [*issues addObject:item];
         }
