@@ -181,6 +181,7 @@ extension String {
  */
 class UIDebugViewController: UITableViewController {
     let file: String
+    var project: AppProject
     var debugDatabase: DebugDatabase
     
     var sortedDebugObjects: [DebugObject] {
@@ -196,6 +197,7 @@ class UIDebugViewController: UITableViewController {
     }
     
     init(project: AppProject) {
+        self.project = project
         self.file = "\(project.getCachePath().1)/debug.json"
         self.debugDatabase = DebugDatabase.getDatabase(ofPath: self.file)
         super.init(style: .insetGrouped)
@@ -213,19 +215,8 @@ class UIDebugViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         
-        /*let buttonBar: UIBarButtonItem = UIBarButtonItem()
-        buttonBar.tintColor = .label
-        buttonBar.title = "Clear"
-        buttonBar.target = self
-        buttonBar.action = #selector(clearDatabase)
-        self.navigationItem.setRightBarButton(buttonBar, animated: false)*/
-        
         let testButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(clearDatabase))
         testButton.tintColor = UIColor.systemRed
-        /*let testButton = UIButton(type: .system)
-        testButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        testButton.addTarget(self, action: #selector(clearDatabase), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: testButton)*/
         self.navigationItem.rightBarButtonItem = testButton
     }
     
@@ -313,6 +304,21 @@ class UIDebugViewController: UITableViewController {
         cell.preservesSuperviewLayoutMargins = false
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        
+        let object: DebugObject = sortedDebugObjects[indexPath.section]
+        let item: DebugItem = object.debugItems[indexPath.row]
+        
+        let fileVC = UINavigationController(rootViewController: CodeEditorViewController(
+            project: project,
+            path: "\(self.project.getPath())/\(object.title)",
+            line: item.line
+        ))
+        fileVC.modalPresentationStyle = .overFullScreen
+        self.present(fileVC, animated: true)
     }
     
     @objc func clearDatabase() {

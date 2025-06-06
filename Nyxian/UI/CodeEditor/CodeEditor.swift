@@ -28,23 +28,23 @@ class CodeEditorViewController: UIViewController {
     private(set) var path: String
     private(set) var textView: TextView
     private(set) var project: AppProject?
-    private(set) var codeEditorConfig: CodeEditorConfig
     private(set) var synpushServer: SynpushServer?
     private(set) var coordinator: Coordinator?
     private(set) var database: DebugDatabase?
+    private(set) var line: UInt64?
     
     init(
         project: AppProject?,
         path: String,
-        codeEditorConfig: CodeEditorConfig
+        line: UInt64? = nil
     ) {
         self.path = path
         
         self.textView = TextView()
         
-        codeEditorConfig.plistHelper?.reloadIfNeeded()
-        self.codeEditorConfig = codeEditorConfig
         self.project = project
+        self.project?.codeEditorConfig.plistHelper?.reloadIfNeeded()
+        self.line = line
         
         let cachePath = self.project!.getCachePath()
         if !cachePath.0 {
@@ -113,16 +113,16 @@ class CodeEditorViewController: UIViewController {
         closeButton.action = #selector(closeEditor)
         self.navigationItem.setLeftBarButton(closeButton, animated: true)
         
-        theme.fontSize = self.codeEditorConfig.fontSize
+        theme.fontSize = self.project?.codeEditorConfig.fontSize ?? 10.0
         
         self.view.backgroundColor = .systemBackground
         self.textView.backgroundColor = theme.backgroundColor
         self.textView.theme = theme
         
-        self.textView.showLineNumbers = codeEditorConfig.showLine
-        self.textView.showSpaces = codeEditorConfig.showSpaces
-        self.textView.isLineWrappingEnabled = codeEditorConfig.wrapLine
-        self.textView.showLineBreaks = codeEditorConfig.showReturn
+        self.textView.showLineNumbers = self.project?.codeEditorConfig.showLine ?? true
+        self.textView.showSpaces = self.project?.codeEditorConfig.showSpaces ?? true
+        self.textView.isLineWrappingEnabled = self.project?.codeEditorConfig.wrapLine ?? true
+        self.textView.showLineBreaks = self.project?.codeEditorConfig.showReturn ?? true
         self.textView.lineSelectionDisplayType = .line
         
         self.textView.lineHeightMultiplier = 1.3
@@ -189,6 +189,28 @@ class CodeEditorViewController: UIViewController {
         (self.view as! OnDisappearUIView).onDisappear = { [weak self] in
             guard let synpushServer = self?.synpushServer else { return }
             synpushServer.deinit()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let line = self.line {                
+                guard let rect: CGRect = self.textView.rectForLine(Int(line)) else { return }
+                
+                let targetOffsetY = rect.origin.y - self.textView.textContainerInset.top
+                let maxOffsetY = self.textView.contentSize.height - self.textView.bounds.height
+                let clampedOffsetY = max(min(targetOffsetY, maxOffsetY), 0)
+                
+                let targetOffset = CGPoint(x: 0, y: clampedOffsetY)
+
+                self.textView.setContentOffset(targetOffset, animated: true)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if let position = self.textView.closestPosition(to: rect.origin) {
+                        self.textView.selectedTextRange = self.textView.textRange(from: position, to: position)
+                    }
+                    
+                    self.textView.becomeFirstResponder()
+                }
+            }
         }
     }
     

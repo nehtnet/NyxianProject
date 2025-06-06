@@ -370,8 +370,7 @@ class FileListViewController: UITableViewController, UIDocumentPickerDelegate {
             } else {
                 let fileVC = UINavigationController(rootViewController: CodeEditorViewController(
                     project: project,
-                    path: fileListEntry.path,
-                    codeEditorConfig: project.codeEditorConfig
+                    path: fileListEntry.path
                 ))
                 fileVC.modalPresentationStyle = .overFullScreen
                 self.present(fileVC, animated: true)
