@@ -39,7 +39,7 @@ class Coordinator: NSObject, TextViewDelegate {
     private var iDoStuff: Bool = false
     private var iDidInvalid: Bool = false
     private var needsAnotherRun: Bool = false
-    private let textInputView: TextInputView?
+//gas/    private let textInputView: TextInputView?
     private let textView: TextView
 
     private let debounce: Debouncer
@@ -48,7 +48,7 @@ class Coordinator: NSObject, TextViewDelegate {
         self.parent = parent
         self.debounce = Debouncer(delay: 1.5)
         self.textView = parent.textView
-        self.textInputView = parent.textView.getTextInputView()
+//gas/        self.textInputView = parent.textView.getTextInputView()
         super.init()
         guard self.parent.synpushServer != nil else { return }
         DispatchQueue.global(qos: .userInitiated).async {
@@ -224,12 +224,12 @@ class Coordinator: NSObject, TextViewDelegate {
                 view.alpha = 0
                 button.alpha = 0
                 self.message.append((button,view))
-                
+/*//gas/                
                 self.textInputView?.addSubview(view)
                 self.textInputView?.sendSubviewToBack(view)
                 self.textInputView?.gutterContainerView.isUserInteractionEnabled = true
                 self.textInputView?.gutterContainerView.addSubview(button)
-                
+*/                
                 UIView.animate(withDuration: 0.3, animations: {
                     view.alpha = 1
                     button.alpha = 1
@@ -358,12 +358,12 @@ class Coordinator: NSObject, TextViewDelegate {
 extension Runestone.TextView {
     func rectForLine(_ lineNumber: Int) -> CGRect? {
         let mirror = Mirror(reflecting: self)
-        guard let lmAny = mirror.descendant("textInputView", "layoutManager"),
+/*//gas/        guard let lmAny = mirror.descendant("textInputView", "layoutManager"),
               let layoutManager = lmAny as? LayoutManager
         else {
             return nil
         }
-        
+*/        
         let lmMirror = Mirror(reflecting: layoutManager)
         guard let lineManager = lmMirror.descendant("lineManager") as? LineManager
         else {
@@ -393,7 +393,7 @@ extension Runestone.TextView {
                       width: width,
                       height: height)
     }
-    
+/*//gas/    
     func getTextInputView() -> TextInputView? {
         let mirror = Mirror(reflecting: self)
         guard let tiview = mirror.descendant("textInputView"),
@@ -404,4 +404,5 @@ extension Runestone.TextView {
         
         return textInputView
     }
+*/
 }
