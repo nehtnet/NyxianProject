@@ -403,7 +403,7 @@ extension Runestone.TextView {
         }
         
         return textInputView
-    }
 */
-    return nil//gas/
+        return nil//gas/
+    }
 }
