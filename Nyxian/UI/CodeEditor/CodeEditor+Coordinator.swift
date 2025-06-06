@@ -363,7 +363,7 @@ extension Runestone.TextView {
         else {
             return nil
         }
-*/        
+        
         let lmMirror = Mirror(reflecting: layoutManager)
         guard let lineManager = lmMirror.descendant("lineManager") as? LineManager
         else {
@@ -393,7 +393,7 @@ extension Runestone.TextView {
                       width: width,
                       height: height)
     }
-/*//gas/    
+    
     func getTextInputView() -> TextInputView? {
         let mirror = Mirror(reflecting: self)
         guard let tiview = mirror.descendant("textInputView"),
@@ -405,4 +405,5 @@ extension Runestone.TextView {
         return textInputView
     }
 */
+    return nil//gas/
 }
