@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7944B5642DEC712700834134 /* PrivateConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7944B5632DEC712700834134 /* PrivateConfig.xcconfig */; };
 		7944B5682DEC74FC00834134 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7944B5672DEC74FC00834134 /* MobileCoreServices.framework */; };
 		AF9919582DC9175A00DDF895 /* TreeSitterObjc in Frameworks */ = {isa = PBXBuildFile; productRef = AF9919572DC9175A00DDF895 /* TreeSitterObjc */; };
 		AF99195B2DC9176900DDF895 /* TreeSitterC in Frameworks */ = {isa = PBXBuildFile; productRef = AF99195A2DC9176900DDF895 /* TreeSitterC */; };
@@ -33,7 +32,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7944B5632DEC712700834134 /* PrivateConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PrivateConfig.xcconfig; sourceTree = "<group>"; };
 		7944B5652DEC74EA00834134 /* Nyxian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nyxian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944B5672DEC74FC00834134 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		AF99171F2DC8EA3C00DDF895 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shared; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 		AF9916D02DC8C42200DDF895 = {
 			isa = PBXGroup;
 			children = (
-				7944B5632DEC712700834134 /* PrivateConfig.xcconfig */,
 				AF99171F2DC8EA3C00DDF895 /* Shared */,
 				AF9916DB2DC8C42200DDF895 /* Nyxian */,
 				7944B5652DEC74EA00834134 /* Nyxian.app */,
@@ -215,7 +212,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFF4D5D92DC9390B00B1B5F9 /* Shared in Resources */,
-				7944B5642DEC712700834134 /* PrivateConfig.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +230,6 @@
 /* Begin XCBuildConfiguration section */
 		AF9916E52DC8C42400DDF895 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7944B5632DEC712700834134 /* PrivateConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -300,7 +295,6 @@
 		};
 		AF9916E62DC8C42400DDF895 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7944B5632DEC712700834134 /* PrivateConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -359,7 +353,6 @@
 		};
 		AF9916E82DC8C42400DDF895 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7944B5632DEC712700834134 /* PrivateConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon Drawn MoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -408,7 +401,6 @@
 		};
 		AF9916E92DC8C42400DDF895 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7944B5632DEC712700834134 /* PrivateConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon Drawn MoonLight";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -565,7 +557,7 @@
 		};
 		AFF4DBF52DCA708500B1B5F9 /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AFF4DBF42DCA708500B1B5F9 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+				package = AFF4DBF42DCA708500B1B5F9 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
 		};
 		AFF4E3482DCCCE0F00B1B5F9 /* TreeSitterXML */ = {
