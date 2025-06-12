@@ -16,7 +16,7 @@ class ImportTableCell: UITableViewCell, UIDocumentPickerDelegate {
     private(set) var url: URL?
     
     init(
-        parent: UIViewController,
+        parent: UIViewController
     ) {
         self.parent = parent
         super.init(style: .default, reuseIdentifier: nil)
