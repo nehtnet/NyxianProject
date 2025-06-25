@@ -39,7 +39,7 @@ class ContentViewController: UITableViewController {
         
         self.path = path
         
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) {

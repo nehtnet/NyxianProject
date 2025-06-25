@@ -15,7 +15,7 @@ class SettingsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -23,7 +23,13 @@ class SettingsViewController: UITableViewController {
         
         switch indexPath.row {
         case 0:
-            cell.imageView?.image = UIImage(systemName: "wrench.adjustable.fill")
+            cell.imageView?.image = UIImage(systemName: {
+                if #available(iOS 16.0, *) {
+                    return "wrench.adjustable.fill"
+                } else {
+                    return "gearshape.2.fill"
+                }
+            }())
             cell.textLabel?.text = "Toolchain"
             break
         case 1:
@@ -31,15 +37,18 @@ class SettingsViewController: UITableViewController {
             cell.textLabel?.text = "Customization"
             break
         case 2:
-            cell.imageView?.image = UIImage(systemName: "document.badge.gearshape.fill")
+            cell.imageView?.image = UIImage(systemName: "tray.2.fill")
             cell.textLabel?.text = "Miscellaneous"
+            break
+        case 3:
+            cell.imageView?.image = UIImage(systemName: "info")
+            cell.textLabel?.text = "Info"
             break
         default:
             break
         }
         
         cell.accessoryType = .disclosureIndicator
-        cell.imageView?.tintColor = .label
         
         return cell
     }
@@ -58,6 +67,9 @@ class SettingsViewController: UITableViewController {
             break
         case 2:
             viewController = MiscellaneousController(style: .insetGrouped)
+            break
+        case 3:
+            viewController = AppInfoViewController(style: .insetGrouped)
             break
         default:
             viewController = UIViewController()

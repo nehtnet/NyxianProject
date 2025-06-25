@@ -19,7 +19,7 @@ void restartProcess(void)
             }
         });
         
-        usleep(500);
+        usleep(1000);
         exit(0);
     });
 }

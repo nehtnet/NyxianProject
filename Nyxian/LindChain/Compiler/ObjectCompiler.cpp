@@ -73,10 +73,8 @@ int CompileObject(int argc,
     auto DiagClient = std::make_unique<TextDiagnosticPrinter>(errorOutputStream, &*DiagOpts);
     auto DiagID = llvm::makeIntrusiveRefCnt<DiagnosticIDs>();
     DiagnosticsEngine Diags(DiagID, &*DiagOpts, DiagClient.get());
-
-    std::string triplePrefix = "arm64-apple-ios";
-    std::string tripleSuffix = platformTripple;
-    llvm::Triple TargetTriple(triplePrefix + tripleSuffix);
+    
+    llvm::Triple TargetTriple(std::string("arm64-apple-ios") + platformTripple);
     
     Driver TheDriver(argv[0], TargetTriple.str(), Diags);
 

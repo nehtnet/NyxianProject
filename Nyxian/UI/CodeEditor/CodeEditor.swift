@@ -217,7 +217,17 @@ class CodeEditorViewController: UIViewController {
     func setupToolbar(textView: TextView) {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        toolbar.barTintColor = self.textView.theme.gutterBackgroundColor
+        let theme: LindDEThemer = getCurrentSelectedTheme()
+        
+        if #available(iOS 15.0, *) {
+            let appearance = UIToolbarAppearance()
+            appearance.configureWithOpaqueBackground()  // Make it opaque
+            appearance.backgroundColor = theme.gutterBackgroundColor
+            toolbar.standardAppearance = appearance
+            toolbar.scrollEdgeAppearance = appearance
+        } else {
+            toolbar.barTintColor = theme.gutterBackgroundColor
+        }
         
         func spawnSeperator() -> UIBarButtonItem {
             return UIBarButtonItem(customView: UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 1)))
@@ -274,6 +284,7 @@ class CodeEditorViewController: UIViewController {
     }
     
     @objc func closeEditor() {
+        NotificationCenter.default.post(name: Notification.Name("CodeEditorDismissed"), object: nil)
         self.dismiss(animated: true)
     }
     

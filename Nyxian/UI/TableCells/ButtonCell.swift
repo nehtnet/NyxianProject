@@ -30,7 +30,7 @@ class ButtonTableCell: UITableViewCell {
         button?.titleLabel?.textAlignment = .left
         button?.contentHorizontalAlignment = .left
         button?.setTitle(self.title, for: .normal)
-        button?.setTitleColor(UIColor.systemBlue, for: .normal)
+        button?.setTitleColor(UILabel.appearance().textColor, for: .normal)
         button?.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(button!)
         

@@ -86,12 +86,19 @@ int main(void)
                 cell = PickerTableCell(options: ["NyxianLDE", "Solarized"], title: "Theme", key: "LDETheme", defaultValue: 0)
                 (cell as! PickerTableCell).callback = { selected in
                     self.themePreviewCell!.switchTheme(theme: themes[selected])
+                    restartProcess()
                 }
             }
         } else {
             cell = UITableViewCell()
             let iconName = icons[indexPath.row]
-            if let image = UIImage(named: "IconPreview\(iconName)") {
+            if let image = UIImage(named: {
+                if #available(iOS 18.0, *) {
+                    return "IconPreview\(iconName)"
+                } else {
+                    return "IconPreview\(iconName)Old"
+                }
+            }()) {
                 let customImageView = UIImageView(image: image)
                 customImageView.layer.cornerRadius = 10
                 customImageView.layer.masksToBounds = true
@@ -121,6 +128,8 @@ int main(void)
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard indexPath.section == 2 else { return }
         
         let iconName: String = self.icons[indexPath.row]
         

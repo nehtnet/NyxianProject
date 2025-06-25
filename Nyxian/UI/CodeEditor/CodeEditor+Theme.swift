@@ -188,11 +188,10 @@ class LindDEThemer: Theme {
 class SolarizedThemer: LindDEThemer {
     override init() {
         super.init()
+        textColor = UIColor(light: (40, 50, 55), dark: (220, 230, 235))
+        backgroundColor = UIColor(light: (253, 246, 227), dark: (7, 54, 66))
         
-        textColor = UIColor(light: (101, 123, 131), dark: (131, 148, 150))
-        backgroundColor = UIColor(light: (253, 246, 227), dark: (0, 43, 54))
-        
-        gutterBackgroundColor = UIColor(light: (238, 232, 213), dark: (7, 54, 66))
+        gutterBackgroundColor = UIColor(light: (238, 232, 213), dark: (0, 43, 54))
         gutterHairlineColor = UIColor(light: (220, 210, 180), dark: (88, 110, 117))
         lineNumberColor = UIColor(light: (147, 161, 161), dark: (88, 110, 117))
         

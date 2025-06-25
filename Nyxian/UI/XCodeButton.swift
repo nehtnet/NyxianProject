@@ -145,12 +145,12 @@ class ProgressCircleView: UIView {
     }
 
     private func commonInit() {
-        backgroundCircle.strokeColor = UIColor.systemGray4.cgColor
+        backgroundCircle.strokeColor = UITableViewCell.appearance().backgroundColor?.cgColor
         backgroundCircle.fillColor   = UIColor.clear.cgColor
         backgroundCircle.lineWidth   = 2
         backgroundCircle.lineCap     = .butt
         
-        progressLayer.strokeColor = UIColor.systemBlue.cgColor
+        progressLayer.strokeColor = UILabel.appearance().textColor.cgColor
         progressLayer.fillColor   = UIColor.clear.cgColor
         progressLayer.lineWidth   = 2
         progressLayer.strokeEnd   = 0

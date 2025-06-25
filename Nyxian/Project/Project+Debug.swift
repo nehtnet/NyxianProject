@@ -201,6 +201,7 @@ class UIDebugViewController: UITableViewController {
         self.file = "\(project.getCachePath().1)/debug.json"
         self.debugDatabase = DebugDatabase.getDatabase(ofPath: self.file)
         super.init(style: .insetGrouped)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshDebugDatabase), name: Notification.Name("CodeEditorDismissed"), object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -226,7 +227,34 @@ class UIDebugViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "\(sortedDebugObjects[section].title) - \(sortedDebugObjects[section].debugItems.count)"
+        return "\(sortedDebugObjects[section].title) • \(sortedDebugObjects[section].debugItems.count)"
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "\(sortedDebugObjects[section].title) • \(sortedDebugObjects[section].debugItems.count)"
+        label.font = UIFont.preferredFont(forTextStyle: .footnote)
+        label.textColor = .label
+        label.numberOfLines = 1
+
+        headerView.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
+            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -4)
+        ])
+
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -309,6 +337,8 @@ class UIDebugViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         
+        guard indexPath.section != 0 else { return }
+        
         let object: DebugObject = sortedDebugObjects[indexPath.section]
         let item: DebugItem = object.debugItems[indexPath.row]
         
@@ -325,5 +355,10 @@ class UIDebugViewController: UITableViewController {
         debugDatabase.clearDatabase()
         debugDatabase.saveDatabase(toPath: self.file)
         tableView.reloadData()
+    }
+    
+    @objc func refreshDebugDatabase() {
+        self.debugDatabase = DebugDatabase.getDatabase(ofPath: self.file)
+        self.tableView.reloadData()
     }
 }

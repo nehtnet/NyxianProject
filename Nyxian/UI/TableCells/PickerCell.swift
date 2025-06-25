@@ -75,8 +75,11 @@ class PickerTableCell: UITableViewCell {
         // now the option button
         let button: UIButton = UIButton()
         button.setTitle(self.selectedOption, for: .normal)
-        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.setTitleColor(UILabel.appearance().textColor, for: .normal)
         button.setImage(image, for: .normal)
+        
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 0)
+        
         button.titleLabel?.textAlignment = .right
         button.semanticContentAttribute = .forceRightToLeft
         button.translatesAutoresizingMaskIntoConstraints = false
